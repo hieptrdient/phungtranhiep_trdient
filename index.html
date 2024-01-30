@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>B21DCCN345_PHÙNG TRẦN HIỆP</title>
+  <title>PHÙNG TRẦN HIỆP</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
   <style>
     body {
@@ -32,11 +32,23 @@
       z-index: -1;
     }
     
+    .portfolio-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    .portfolio-button {
+      background-color: #5EA059;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 4px;
+    }
     .dialog-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -45,13 +57,12 @@
     }
     
     .dialog-box {
-      width: 300px;
-      height: 115px;
       background-color: black;
       color: white;
       text-align: center;
       padding: 20px;
       border-radius: 10px;
+      display: inline-block;
     }
     
     h1 {
@@ -67,13 +78,22 @@
 <body>
   <div class="background-image"></div>
   <div class="overlay"></div>
-  <h1>B21DCCN345_PHÙNG TRẦN HIỆP</h1>
+  <div style="text-align:center">
+      <h1>B21DCCN345_PHÙNG TRẦN HIỆP</h1>
+  </div>
   <div class="dialog-container">
     <div class="dialog-box">
       <p>Mã sinh viên: B21DCCN345</p>
       <p>Ngành: Công nghệ thông tin</p>
       <p>Lớp: D21CQCN09-B</p>
+      <p>3D artist</p>
     </div>
+  </div>
+  <div class="portfolio-container">
+    <a class="portfolio-button" href="https://www.behance.net/hieptrdient" target="_blank">Portfolio</a>
+  </div>
+  <div class="portfolio-container">
+    <a class="portfolio-button" href="https://youtu.be/dQw4w9WgXcQ?si=3ZfT1V_vRy860RLI" target="_blank">More info</a>
   </div>
 </body>
 </html>

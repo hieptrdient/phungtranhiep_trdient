@@ -2,15 +2,50 @@
 <html>
 <head>
   <title>Hệ thống thi trắc nghiệm</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
   <style>
     .question-group {
+      background: radial-gradient(rgba(0,0,0,0.5),rgba(0,0,0,1));
+      color: white;
       margin-bottom: 20px;
+      font-family: "Montserrat", sans-serif;
     }
 
     .question {
       margin-bottom: 10px;
     }
   </style>
+
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: "Montserrat", sans-serif;
+    }
+    
+    .background-image {
+      background-image: url('bg_img.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    
+    .overlay {
+      background: radial-gradient(rgba(0,0,0,0.4),rgba(0,0,0,7));
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+  </style>
+
   <script>
     var correctAnswers = {
       group1: {
@@ -105,6 +140,8 @@
   </script>
 </head>
 <body>
+  <div class="background-image"></div>
+  <div class="overlay"></div>
   <div id="info-form">
     <h1>Hệ thống thi trắc nghiệm</h1>
     <form>

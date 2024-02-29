@@ -1,99 +1,208 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PHÙNG TRẦN HIỆP</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
+  <title>Hệ thống thi trắc nghiệm</title>
   <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: "Montserrat", sans-serif;
+    .question-group {
+      margin-bottom: 20px;
     }
-    
-    .background-image {
-      background-image: url('bg_img.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    
-    .overlay {
-      background: radial-gradient(rgba(0,0,0,0.4),rgba(0,0,0,7));
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    
-    .portfolio-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    
-    .portfolio-button {
-      background: radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.25));
-      color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-    .dialog-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-    
-    .dialog-box {
-      background: radial-gradient(rgba(0,0,0,0.5),rgba(0,0,0,1));
-      color: white;
-      text-align: center;
-      padding: 20px;
-      border-radius: 10px;
-      display: inline-block;
-    }
-    
-    h1 {
-      font-size: 48px;
-      font-weight: 600;
-    }
-    
-    p {
-      margin-top: 10px;
+
+    .question {
+      margin-bottom: 10px;
     }
   </style>
+  <script>
+    var correctAnswers = {
+      group1: {
+        question1: "true",
+        question2: "false",
+        // Thêm các câu hỏi khác của nhóm 1 và câu trả lời đúng tương ứng
+      },
+      group2: {
+        question11: "A",
+        question12: "B",
+        // Thêm các câu hỏi khác của nhóm 2 và câu trả lời đúng tương ứng
+      },
+      group3: {
+        question21: ["A", "C"],
+        question22: ["B", "D"],
+        // Thêm các câu hỏi khác của nhóm 3 và các câu trả lời đúng tương ứng (dạng mảng)
+      },
+      group4: {
+        question31: "Câu trả lời tự luận",
+        question32: "Câu trả lời tự luận",
+        // Thêm các câu hỏi khác của nhóm 4 và câu trả lời đúng tương ứng
+      }
+    };
+
+    function submitForm() {
+      var name = document.getElementById("name").value;
+      var birthdate = document.getElementById("birthdate").value;
+      var studentId = document.getElementById("studentId").value;
+      var className = document.getElementById("className").value;
+
+      // Hiển thị câu hỏi sau khi người dùng nhập thông tin
+      document.getElementById("info-form").style.display = "none";
+      document.getElementById("question-form").style.display = "block";
+
+      // In ra thông tin người dùng
+      document.getElementById("user-info").innerHTML = "<strong>Họ và tên:</strong> " + name +
+        "<br><strong>Ngày tháng năm sinh:</strong> " + birthdate +
+        "<br><strong>Mã sinh viên:</strong> " + studentId +
+        "<br><strong>Lớp:</strong> " + className;
+    }
+
+    function calculateScore() {
+      var totalScore = 0;
+
+      // Chấm điểm nhóm 1
+      var group1Score = 0;
+      var group1Questions = Object.keys(correctAnswers.group1);
+      group1Questions.forEach(function(question) {
+        if (document.querySelector('input[name="' + question + '"]:checked').value === correctAnswers.group1[question]) {
+          group1Score++;
+        }
+      });
+      totalScore += group1Score;
+
+      // Chấm điểm nhóm 2
+      var group2Score = 0;
+      var group2Questions = Object.keys(correctAnswers.group2);
+      group2Questions.forEach(function(question) {
+        if (document.querySelector('input[name="' + question + '"]:checked').value === correctAnswers.group2[question]) {
+          group2Score++;
+        }
+      });
+      totalScore += group2Score;
+
+      // Chấm điểm nhóm 3
+      var group3Score = 0;
+      var group3Questions = Object.keys(correctAnswers.group3);
+      group3Questions.forEach(function(question) {
+        var userSelectedAnswers = Array.from(document.querySelectorAll('input[name="' + question + '[]"]:checked')).map(function(checkbox) {
+          return checkbox.value;
+        });
+        if (arraysEqual(userSelectedAnswers, correctAnswers.group3[question])) {
+          group3Score++;
+        }
+      });
+      totalScore += group3Score;
+
+      // Chấm điểm nhóm 4 (tự luận)
+      var group4Score = 0;
+      var group4Questions = Object.keys(correctAnswers.group4);
+      group4Questions.forEach(function(question) {
+        if (document.getElementById(question).value.trim() === correctAnswers.group4[question]) {
+          group4Score++;
+        }
+      });
+      totalScore += group4Score;
+
+      // In ra số điểm
+      document.getElementById("result").innerHTML = "<strong>Số điểm nhóm 1:</strong> " + group1Score +
+        "<br><strong>Số điểm nhóm 2:</strong> " + group2Score +
+        "<br><strong>Sốđiểm nhóm 3:</strong> " + group3Score +
+        "<br><strong>Số điểm nhóm 4:</strong> " + group4Score +
+        "<br><strong>Tổng số điểm:</strong> " + totalScore;
+    }
+
+    function arraysEqual(arr1, arr2) {
+      // Kiểm tra hai mảng có bằng nhau hay không
+      if (arr1.length !== arr2.length) return false;
+      for (var i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) return false;
+      }
+      return true;
+    }
+  </script>
 </head>
 <body>
-  <div class="background-image"></div>
-  <div class="overlay"></div>
-  <div style="text-align:center">
-      <h1>B21DCCN345_PHÙNG TRẦN HIỆP</h1>
+  <div id="info-form">
+    <h1>Hệ thống thi trắc nghiệm</h1>
+    <form>
+      <label for="name">Họ và tên:</label>
+      <input type="text" id="name" required><br>
+
+      <label for="birthdate">Ngày tháng năm sinh:</label>
+      <input type="date" id="birthdate" required><br>
+
+      <label for="studentId">Mã sinh viên:</label>
+      <input type="text" id="studentId" required><br>
+
+      <label for="className">Lớp:</label>
+      <input type="text" id="className" required><br>
+
+      <button type="button" onclick="submitForm()">Bắt đầu thi</button>
+    </form>
   </div>
-  <div class="dialog-container">
-    <div class="dialog-box">
-      <p>Mã sinh viên: B21DCCN345</p>
-      <p>Ngành: Công nghệ thông tin</p>
-      <p>Lớp: D21CQCN09-B</p>
-      <p>3D artist</p>
+
+  <div id="question-form" style="display: none;">
+    <h2>Thông tin người dùng:</h2>
+    <div id="user-info"></div>
+
+    <h2>Câu hỏi:</h2>
+    <div class="question-group">
+      <h3>Nhóm 1 (Lựa chọn Đúng/Sai)</h3>
+      <div class="question">
+        <p>Câu hỏi 1: ...</p>
+        <input type="radio" name="question1" value="true"> Đúng
+        <input type="radio" name="question1" value="false"> Sai
+      </div>
+      <div class="question">
+        <p>Câu hỏi 2: ...</p>
+        <input type="radio" name="question2" value="true"> Đúng
+        <input type="radio" name="question2" value="false"> Sai
+      </div>
+      <!-- Thêm các câu hỏi khác của nhóm 1 -->
     </div>
+
+    <div class="question-group">
+      <h3>Nhóm 2 (Chọn 1 trong 4 đáp án)</h3>
+      <div class="question">
+        <p>Câu hỏi 11: ...</p>
+        <input type="radio" name="question11" value="A"> Đáp án A
+        <input type="radio" name="question11" value="B"> Đáp án B
+        <input type="radio" name="question11" value="C"> Đáp án C
+        <input type="radio" name="question11" value="D"> Đáp án D
+      </div>
+      <div class="question">
+        <p>Câu hỏi 12: ...</p>
+        <input type="radio" name="question12" value="A"> Đáp án A
+        <input type="radio" name="question12" value="B"> Đáp án B
+        <input type="radio" name="question12" value="C"> Đáp án C
+        <input type="radio" name="question12" value="D"> Đáp án D
+      </div>
+      <!-- Thêm các câu hỏi khác của nhóm 2 -->
+    </div>
+
+    <div class="question-group">
+      <h3>Nhóm 3 (Chọn nhiều đáp án)</h3>
+      <div class="question">
+        <p>Câu hỏi 21: ...</p>
+        <input type="checkbox" name="question21[]" value="A"> Đáp án A
+        <input type="checkbox" name="question21[]" value="B"> Đáp án B
+        <input type="checkbox" name="question21[]" value="C"> Đáp án C
+        <input type="checkbox" name="question21[]" value="D"> Đáp án D
+      </div>
+    <div class="question-group">
+      <h3>Nhóm 4 (Trả lời tự luận)</h3>
+      <div class="question">
+        <p>Câu hỏi 31: ...</p>
+        <textarea id="question31" rows="4" cols="50"></textarea>
+      </div>
+      <div class="question">
+        <p>Câu hỏi 32: ...</p>
+        <textarea id="question32" rows="4" cols="50"></textarea>
+      </div>
+      <!-- Thêm các câu hỏi khác của nhóm 4 -->
+    </div>
+
+    <button onclick="calculateScore()">Nộp bài</button>
   </div>
-  <div class="portfolio-container">
-    <a class="portfolio-button" href="https://www.behance.net/hieptrdient" target="_blank">Portfolio</a>
-  </div>
-  <div class="portfolio-container">
-    <a class="portfolio-button" href="https://youtu.be/dQw4w9WgXcQ?si=3ZfT1V_vRy860RLI" target="_blank">More info</a>
+
+  <div id="result" style="display: none;">
+    <!-- Kết quả sẽ được hiển thị ở đây -->
+    <!-- ... -->
   </div>
 </body>
 </html>
